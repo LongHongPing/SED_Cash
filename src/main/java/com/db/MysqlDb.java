@@ -142,5 +142,30 @@ public class MysqlDb {
         }
         return task;
     }
+    /** 检查xset是否在表中 */
+    public static boolean isExistXSet(String key) throws Exception{
+        return bloomFilter.mightContain(key.getBytes("utf-8"));
+    }
+    /** 获得表中内容 */
+    public ArrayList<String> getXSet(int offset,int rowCount){
+        ArrayList<String> XSets = new ArrayList<>();
+        Task task = null;
+        String XSetSql = "select * from XSet limit " + offset + "," + rowCount;
+        try{
+            preparedStatement = connection.prepareStatement(XSetSql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                String XSet = resultSet.getString(1);
+                XSets.add(XSet);
+            }
+            if(preparedStatement != null){
+                preparedStatement.close();
+            }
+            return XSets;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
