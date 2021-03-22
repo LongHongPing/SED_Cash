@@ -6,9 +6,9 @@ import redis.clients.jedis.JedisPoolConfig;
 
 /** redis线程池 */
 public final class RedisPool {
-    private static String ADDR = "";
+    private static String ADDR = "127.0.0.1";
     private static int PORT = 6379;
-    private static String AUTH = "";
+    private static String AUTH = "root";
 
     private static int MAX_ACTIVE = 1024;
     private static int MAX_IDLE = 200;
@@ -27,7 +27,7 @@ public final class RedisPool {
             config.setMaxIdle(MAX_IDLE);
             config.setTestOnBorrow(TEST);
 
-            jedisPool = new JedisPool(config,ADDR,PORT,TIMEOUT);
+            jedisPool = new JedisPool(config,ADDR,PORT,TIMEOUT,AUTH);
         }catch (Exception e){
             e.printStackTrace();
         }
