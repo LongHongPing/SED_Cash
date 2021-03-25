@@ -19,7 +19,7 @@ public class SerialUtil {
         }
     }
 
-    public static <T> T deserialize(final String fileToDeserial){
+    public static <T> T deSerialize(final String fileToDeserial){
          if(fileToDeserial == null){
              throw new IllegalArgumentException("Cannot deserialize file");
          }
@@ -28,6 +28,7 @@ public class SerialUtil {
          try(FileInputStream fis = new FileInputStream(fileToDeserial);
              ObjectInputStream ois = new ObjectInputStream(fis)){
              objectOut = (T) ois.readObject();
+             //System.out.println("objectOut " + objectOut);
          }catch(IOException | ClassNotFoundException e){
              e.printStackTrace();
         }

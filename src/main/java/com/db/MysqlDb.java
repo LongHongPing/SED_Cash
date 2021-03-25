@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /** Mysql工具类 */
 public class MysqlDb {
@@ -18,12 +19,12 @@ public class MysqlDb {
     private static BloomFilter<byte[] > bloomFilter;
 
     static{
-        File file = GenUtil.getFile("testBloomFilter","xsetBF001.bf");
-        bloomFilter = SerialUtil.deserialize(file.getAbsolutePath());
+        File file = GenUtil.getFile("testBloomFilter","xset_bf_10000.bf");
+        bloomFilter = SerialUtil.deSerialize(file.getAbsolutePath());
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://127.0.0.1:3306/vsse?serverTimezone=UTC";
+            String url = "jdbc:mysql://127.0.0.1:3306/vsse?serverTimezone=UTC&useSSL=false";
             String user = "root";
             String password = "root";
 
@@ -68,14 +69,15 @@ public class MysqlDb {
                 System.out.println("Item is too big");
                 return;
             }
-            preparedStatement.setBytes(2,tmp);
+            preparedStatement.setString(2, Arrays.toString(tmp));
             try{
                 preparedStatement.execute();
             }catch (Exception e){
                 if(preparedStatement != null){
                     preparedStatement.close();
                 }
-                System.out.println("Table TSets inset error");
+                e.printStackTrace();
+                System.out.println("Table TSets insert error");
                 return;
             }
             if(preparedStatement != null){
@@ -96,7 +98,8 @@ public class MysqlDb {
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
                 String stag = resultSet.getString(1);
-                byte[] b2 = resultSet.getBytes(2);
+                //byte[] b2 = resultSet.getBytes(2);
+                byte[] b2 = resultSet.getString(2).getBytes("utf-8");
                 ArrayList<Item> items = (ArrayList<Item>) GenUtil.byte2Obj(b2);
                 Task task = new Task(stag,items,null);
                 tasks.add(task);
@@ -123,13 +126,16 @@ public class MysqlDb {
     /** 执行查询 */
     private static Task get(String key,String TSetSql){
         Task task = null;
+
         try{
             preparedStatement = connection.prepareStatement(TSetSql);
             preparedStatement.setString(1,key);
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                System.out.println("go to here ...");
                 String stag = resultSet.getString(1);
-                byte[] b2 = resultSet.getBytes(2);
+                //byte[] b2 = resultSet.getBytes(2);
+                byte[] b2 = resultSet.getString(2).getBytes("utf-8");
                 ArrayList<Item> items = (ArrayList<Item>) GenUtil.byte2Obj(b2);
                 task = new Task(stag,items,null);
             }

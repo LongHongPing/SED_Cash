@@ -6,16 +6,19 @@ import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /** 搜索 */
 public class SearchProtocol {
     private static MasterKey mk;
     private static Pairing pairing;
+
     static{
-        mk = EDBSetupKeyUtil.getKey();
-        pairing = PairingFactory.getPairing("param/curves/a.properties");
+            mk = EDBSetupKeyUtil.getKey();
+            pairing = PairingFactory.getPairing("param/curves/a.properties");
     }
     /** 客户端业务1 */
     public static SearchClient searchClient(ArrayList<String> keywords) throws Exception{

@@ -4,18 +4,22 @@ import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+import static org.apache.commons.io.IOUtils.readLines;
 
 /** 通用工具类 */
 public class GenUtil {
     /** 加密初始向量 */
     private static final byte[] ivBytes = new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     /** 获取文件 */
-    public static File getFile(String dirname,String fileName){
+    public static File getFile(String dirname,String fileName) {
         String path = System.getProperty("user.dir");
         path = path + File.separator + dirname;
         File file = new File(path,fileName);
+
         return file;
     }
     /** PRF */
@@ -102,6 +106,9 @@ public class GenUtil {
             e.printStackTrace();
         }
         return result;
+    }
+    public static List<String> read(InputStream input) throws IOException {
+        return readLines(input, Charset.defaultCharset());
     }
     private static byte[] readAndClose(InputStream is){
         byte[] bucket = new byte[32*1024];
