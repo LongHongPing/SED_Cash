@@ -14,6 +14,7 @@ public class SearchTest {
         keywords.add("index1");
         SearchClient searchClient = SearchProtocol.searchClient(keywords);
         ArrayList<byte[]> sendByts = SearchProtocol.searchServer(searchClient,"TSets");
+        System.out.println("sendBytes's size " + sendByts.size());
         ArrayList<String> reciveStrs = SearchProtocol.searchClient(keywords.get(0),sendByts);
         for(String fileName : reciveStrs){
             System.out.println(fileName);
@@ -132,50 +133,6 @@ public class SearchTest {
             }
         }
         System.out.println("100 times test need " + sumTime + " ms");
-    }
-    @Test
-    public void searchTest5() throws Exception{
-        File file = GenUtil.getFile("text","testSet.txt");
-        List<String> lines = GenUtil.read(new FileInputStream(file));
-        ArrayList<String> tableNames = new ArrayList<>();
-        tableNames.add("TSets");
-        for(String tableName : tableNames){
-            long sumTime = 0;
-            for(int i = 0;i < 100;i++){
-                Map<String,Integer> keyCount = new HashMap<>();
-                for(int j = 0;j < 3;j++){
-                    Random random = new Random();
-                    int index = random.nextInt(lines.size());
-                    String str = lines.get(index);
-                    keyCount.put(str.split(" ")[0],Integer.parseInt(str.split(" ")[1]));
-                }
-                ArrayList<Map.Entry<String,Integer>> list = new ArrayList<>();
-                Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-                    @Override
-                    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                        return o1.getValue().compareTo(o2.getValue());
-                    }
-                });
-                ArrayList<String> keywords = new ArrayList<>();
-                for(String str : keyCount.keySet()){
-                    keywords.add(str);
-                }
-
-                int count = keyCount.get(keywords.get(0));
-                System.out.println("The first phase start...");
-                SearchClient searchClient = SearchProtocol.searchClient(keywords,count);
-
-                System.out.println("The second phase start...");
-                long start = System.currentTimeMillis();
-                ArrayList<byte[]> result = SearchProtocol.searchServer(searchClient,"TSets");
-                long end = System.currentTimeMillis();
-                sumTime = sumTime + (end - start);
-                if(result == null){
-                    continue;
-                }
-            }
-            System.out.println(tableName + " 100 times test need " + sumTime + " ms");
-        }
     }
 
 }

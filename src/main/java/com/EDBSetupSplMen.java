@@ -25,13 +25,14 @@ public class EDBSetupSplMen {
         int cnt = 0;
         //处理每个文件
         for(final String index : indexes){
+            //计算TSet
             final Element xIndex = GenUtil.Fp(pairing,mk.getKi(),index.getBytes("utf-8"));
             final Element z = GenUtil.Fp(pairing,mk.getKz(),(w + cnt + "").getBytes("utf-8"));
             Element y = xIndex.duplicate().mul(z.duplicate().invert());
 
             final byte[] e = GenUtil.encAES(Ke,index);
             items.add(new Item(e,new SerializableElement(y)));
-
+            //计算XSet
             Element t1 = GenUtil.Fp(pairing,mk.getKx(),w.getBytes("utf-8"));
             Element t2 = t1.duplicate().mul(xIndex);
             Element result = mk.getG().duplicate().powZn(t2.duplicate());

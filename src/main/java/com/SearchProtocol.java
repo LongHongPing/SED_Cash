@@ -20,7 +20,7 @@ public class SearchProtocol {
             mk = EDBSetupKeyUtil.getKey();
             pairing = PairingFactory.getPairing("param/curves/a.properties");
     }
-    /** 客户端业务1 */
+    /** 客户端业务1  OXT*/
     public static SearchClient searchClient(ArrayList<String> keywords) throws Exception{
         Element g = mk.getG();
         byte[] stag = TSetSplitMem.TSetGetTag(keywords.get(0));
@@ -51,7 +51,7 @@ public class SearchProtocol {
         }
         return new SearchClient(stag,xtoken);
     }
-    /** 客户端业务2 */
+    /** 客户端业务2  BXT*/
     public static ArrayList<String> searchClient(String w,ArrayList<byte[]> es) throws Exception{
         ArrayList<String> indexes = new ArrayList<>();
         byte[] Ke = GenUtil.F(mk.getKs(),w);
@@ -66,7 +66,6 @@ public class SearchProtocol {
         ArrayList<byte[]> results = new ArrayList<>();
         ArrayList<Item> items = TSetSplitMem.TSetRetrive(searchClient.getStag(),tableName);
         MysqlDb mysqlDb = new MysqlDb();
-
         if(items == null){
             return null;
         }

@@ -24,7 +24,7 @@ public class MysqlDb {
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://127.0.0.1:3306/vsse?serverTimezone=UTC&useSSL=false";
+            String url = "jdbc:mysql://127.0.0.1:3306/vsse?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
             String user = "root";
             String password = "root";
 
@@ -132,7 +132,7 @@ public class MysqlDb {
             preparedStatement.setString(1,key);
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                System.out.println("go to here ...");
+                //System.out.println("go to here ...");
                 String stag = resultSet.getString(1);
                 //byte[] b2 = resultSet.getBytes(2);
                 byte[] b2 = resultSet.getString(2).getBytes("utf-8");
